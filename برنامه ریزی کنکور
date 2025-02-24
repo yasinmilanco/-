@@ -1,0 +1,57 @@
+using System;
+using System.Collections.Generic;
+
+class StudyPlanner
+{
+    static void Main(string[] args)
+    {
+        List<string> books = new List<string>();
+        Dictionary<string, int> dailyStudyTime = new Dictionary<string, int>();
+        Dictionary<string, List<string>> weeklyStudyDays = new Dictionary<string, List<string>>();
+
+        // جمع‌آوری اطلاعات کتاب‌ها
+        Console.WriteLine("لطفاً نام کتاب‌ها را وارد کنید (برای پایان دادن 'done' را وارد کنید):");
+        while (true)
+        {
+            string book = Console.ReadLine();
+            if (book.ToLower() == "done") break;
+            books.Add(book);
+
+            // زمان مطالعه روزانه
+            Console.Write($"چقدر وقت برای مطالعه {book} در روز می‌گذارید؟ (به دقیقه): ");
+            int time;
+            while (!int.TryParse(Console.ReadLine(), out time) || time < 0)
+            {
+                Console.Write("لطفاً یک عدد صحیح مثبت وارد کنید: ");
+            }
+            dailyStudyTime[book] = time;
+
+            // روزهای مطالعه
+            Console.Write($"در چه روزهایی از هفته {book} را می‌خواهید بخوانید؟ (مثلاً دوشنبه، چهارشنبه): ");
+            string daysInput = Console.ReadLine();
+            List<string> days = new List<string>(daysInput.Split(','));
+            weeklyStudyDays[book] = days;
+        }
+
+        // جمع‌آوری اطلاعات دیگر
+        Console.Write("ساعت شروع مطالعه خود را وارد کنید (فرمت: HH:mm): ");
+        TimeSpan startTime = TimeSpan.Parse(Console.ReadLine());
+
+        Console.Write("ساعت خواب خود را وارد کنید (فرمت: HH:mm): ");
+        TimeSpan sleepTime = TimeSpan.Parse(Console.ReadLine());
+
+        Console.Write("آیا می‌خواهید برنامه ثابت باشد یا متغیر؟ (ثابت/متغیر): ");
+        string scheduleType = Console.ReadLine();
+
+        // نمایش برنامه
+        Console.WriteLine("\nبرنامه شما:");
+        foreach (var book in books)
+        {
+            Console.WriteLine($"کتاب: {book}, زمان مطالعه: {dailyStudyTime[book]} دقیقه, روزهای مطالعه: {string.Join(", ", weeklyStudyDays[book])}");
+        }
+
+        Console.WriteLine($"\nساعت شروع مطالعه: {startTime}");
+        Console.WriteLine($"ساعت خواب: {sleepTime}");
+        Console.WriteLine($"نوع برنامه: {scheduleType}");
+    }
+}
